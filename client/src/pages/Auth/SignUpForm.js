@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Title, Input, Button } from '../../utils/FormComponents'
+import { Form, Title, Input } from '../../utils/FormComponents'
 import PasswordInput from '../../components/PasswordInput'
-import { toast } from 'react-toastify'
+import ReCAPTCHA from 'react-google-recaptcha'
 import styled from 'styled-components'
 import PasswordValidator from '../../components/PasswordValidator'
 import { useAppContext } from '../../context/appContext'
@@ -26,6 +26,7 @@ const SignUpForm = ({ isSignIn }) => {
     password: '',
     cPassword: '',
   })
+  const [verfied, setVerified] = useState(false)
   const handleRegisterChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value })
   }
@@ -94,12 +95,15 @@ const SignUpForm = ({ isSignIn }) => {
           onChange={handleRegisterChange}
           value={values.cPassword}
         />
-        <div className='validator'>
-          <PasswordValidator password={values.password} />
-          <div className='capcha'>Capcha</div>
-        </div>
+        <PasswordValidator password={values.password} />
+        <ReCAPTCHA
+          sitekey='6LfOe1UlAAAAAHvGD2q5R-K9VAU8TAyQH7s4d2TP'
+          onChange={() => setVerified(true)}
+        />
 
-        <Button className='sign-up-btn'>Sign Up</Button>
+        <button className='sign-up-btn' disabled={!verfied}>
+          Sign Up
+        </button>
       </Form>
     </Wrapper>
   )
@@ -123,11 +127,21 @@ const Wrapper = styled.div`
       : null}
   .sign-up-btn {
     background: dodgerblue;
-  }
-  .validator {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+    margin-top: 1rem;
+    border-radius: 20px;
+    border: 2px solid;
+    color: #ffffff;
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding: 0.4rem 1.3rem;
+    letter-spacing: 1px;
+    transition: transform 80ms ease-in;
+    &:active {
+      transform: scale(0.95);
+    }
+    &:focus {
+      outline: none;
+    }
   }
 `
 export default SignUpForm
