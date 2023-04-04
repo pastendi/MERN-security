@@ -11,6 +11,7 @@ const Cryptr = require('cryptr')
 const cryptr = new Cryptr(process.env.CRYPTR_KEY)
 
 const register = async (req, res) => {
+  //destructing and parameterizing values to stop sql injection
   const { username, email, password } = req.body
   const emailAlreadyExists = await User.findOne({ email })
   if (emailAlreadyExists) {

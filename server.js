@@ -3,6 +3,8 @@ const app = express()
 const cors = require('cors')
 require('express-async-errors')
 require('dotenv').config()
+const helmet = require('helmet') //middleware to prevent XSS attacks.
+const xss = require('xss-clean') //middleware that sanitizes user input to prevent XSS attacks
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const connectDB = require('./connectDB')
@@ -15,6 +17,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(bodyParser.json())
+app.use(helmet())
+app.use(xss())
 
 //pipeline
 app.get('/', (req, res) => {
